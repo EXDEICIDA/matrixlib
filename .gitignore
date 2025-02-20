@@ -1,0 +1,27 @@
+# Bytecode files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+*.egg-info/
+
+# Build and distribution directories
+build/
+dist/
+*.egg
+*.manifest
+*.spec
+
+# PyCharm project files
+.idea/
+
+# Logs and temporary files
+*.log
+*.tmp
+.DS_Store
