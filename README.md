@@ -189,5 +189,3 @@ Visualize.to_heatmap(C)
 - Follow existing method patterns.  
 - Include input validation and error handling.  
 ``` 
-
-This documentation consolidates all provided class files into a structured, unified format while preserving mathematical rigor and practical examples.
