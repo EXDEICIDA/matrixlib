@@ -1,12 +1,12 @@
 from typing import Tuple
-
 import matplotlib
 import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
 import seaborn as sns
-
 from matrixlib.core import Matrix
+import plotly.graph_objects as go
+
 
 matplotlib.use('qt5agg')  # Use 'qt5agg' for better Qt support
 
@@ -276,37 +276,37 @@ class Visualize:
         # Create figure and axes with space for colorbar
         fig, ax = plt.subplots(figsize=figsize)
 
-        G = nx.Graph()
+        g = nx.Graph()
 
         # Add nodes
         for i in range(len(matrix.data)):
-            G.add_node(i)
+            g.add_node(i)
 
         # Add edges for correlations above threshold
         for i in range(len(matrix.data)):
             for j in range(i + 1, len(matrix.data)):
                 if abs(matrix.data[i][j]) >= threshold:
-                    G.add_edge(i, j, weight=abs(matrix.data[i][j]))
+                    g.add_edge(i, j, weight=abs(matrix.data[i][j]))
 
-        pos = nx.spring_layout(G)
+        pos = nx.spring_layout(g)
 
         # Draw nodes
-        nx.draw_networkx_nodes(G, pos,
+        nx.draw_networkx_nodes(g, pos,
                                node_color='lightblue',
                                node_size=500,
                                ax=ax)
 
         # Edge colors based on correlation strength
-        edges = G.edges()
+        edges = g.edges()
         if edges:  # Only proceed if there are edges
-            weights = [G[u][v]['weight'] for u, v in edges]
+            weights = [g[u][v]['weight'] for u, v in edges]
 
             # Create a normalization for the colormap
             norm = plt.Normalize(min(weights), max(weights))
 
             # Draw edges with colors
             edge_collection = nx.draw_networkx_edges(
-                G, pos,
+                g, pos,
                 edge_color=weights,
                 edge_cmap=plt.cm.RdYlBu,
                 edge_vmin=min(weights),
@@ -316,7 +316,7 @@ class Visualize:
             )
 
             # Add labels
-            nx.draw_networkx_labels(G, pos, ax=ax)
+            nx.draw_networkx_labels(g, pos, ax=ax)
 
             # Add colorbar
             sm = plt.cm.ScalarMappable(cmap=plt.cm.RdYlBu, norm=norm)
@@ -327,3 +327,88 @@ class Visualize:
         ax.axis('off')
         plt.tight_layout()
         plt.show()
+
+    @staticmethod
+    def to_sankey(matrix: Matrix, source_labels=None, target_labels=None,
+                  title="Sankey Diagram", figsize=(12, 8),
+                  source_colors=None, target_colors=None):
+        """
+        Visualize the matrix as a Sankey diagram where each cell represents a flow
+        from row (source) to column (target).
+
+        Parameters:
+        -----------
+        matrix : Matrix
+            The matrix object to visualize. Each cell represents flow from row to column.
+        source_labels : list, optional
+            Labels for the source nodes (rows). If None, uses "Source 0", "Source 1", etc.
+        target_labels : list, optional
+            Labels for the target nodes (columns). If None, uses "Target 0", "Target 1", etc.
+        title : str, optional
+            Title for the Sankey diagram
+        figsize : tuple, optional
+            Figure size (width, height) in inches
+        source_colors : list, optional
+            List of colors for source nodes. If None, uses default blues.
+        target_colors : list, optional
+            List of colors for target nodes. If None, uses default oranges.
+        """
+
+        # Get matrix dimensions
+        rows, cols = len(matrix.data), len(matrix.data[0])
+
+        # Create default labels if not provided
+        if source_labels is None:
+            source_labels = [f"Source {i}" for i in range(rows)]
+        if target_labels is None:
+            target_labels = [f"Target {i}" for i in range(cols)]
+
+        # Default color schemes if not provided
+        if source_colors is None:
+            source_colors = [f"rgb(31, {100 + i * 30}, 180)" for i in range(rows)]
+        if target_colors is None:
+            target_colors = [f"rgb(255, {100 + i * 30}, 14)" for i in range(cols)]
+
+        # Combine colors for all nodes
+        node_colors = source_colors + target_colors
+
+        # Create lists for Sankey diagram
+        sources = []
+        targets = []
+        values = []
+        labels = source_labels + target_labels
+
+        # Populate the lists
+        for i in range(rows):
+            for j in range(cols):
+                if matrix.data[i][j] > 0:  # Only add non-zero flows
+                    sources.append(i)
+                    targets.append(j + rows)  # Offset target indices
+                    values.append(matrix.data[i][j])
+
+        # Create the Sankey diagram
+        fig = go.Figure(data=[go.Sankey(
+            node=dict(
+                pad=15,
+                thickness=20,
+                line=dict(color="black", width=0.5),
+                label=labels,
+                color=node_colors
+            ),
+            link=dict(
+                source=sources,
+                target=targets,
+                value=values
+            )
+        )])
+
+        # Update layout
+        fig.update_layout(
+            title=title,
+            font_size=10,
+            width=figsize[0] * 100,  # Convert inches to pixels
+            height=figsize[1] * 100
+        )
+
+        # Show the plot
+        fig.show()

@@ -215,3 +215,49 @@ class Operation:
         for _ in range(n - 1):
             result = Operation.multiply(result, matrix)
         return result
+
+    @staticmethod
+    def correlation(matrix: Matrix) -> Matrix:
+        """
+        Compute the correlation matrix (Pearson correlation coefficient) for a given matrix.
+
+        Args:
+            matrix (Matrix): The input matrix (data with variables as columns)
+
+        Returns:
+            Matrix: The correlation matrix
+        """
+        data = matrix.data
+        n = len(data)  # Number of rows
+        m = len(data[0])  # Number of columns
+
+        # Step 1: Compute the means of each column
+        means = [sum(col) / n for col in zip(*data)]
+
+        # Step 2: Compute the standard deviations of each column
+        std_devs = []
+        for i in range(m):
+            # Use n-1 for sample standard deviation (Bessel's correction)
+            variance = sum((data[j][i] - means[i]) ** 2 for j in range(n)) / (n - 1)
+            std_devs.append(variance ** 0.5)
+
+        # Step 3: Compute the correlation matrix
+        correlation_matrix = []
+        for i in range(m):
+            correlation_row = []
+            for j in range(m):
+                # Skip division if either standard deviation is zero
+                if std_devs[i] == 0 or std_devs[j] == 0:
+                    correlation_row.append(1.0 if i == j else 0.0)
+                    continue
+
+                # Compute covariance between columns i and j using n-1
+                covariance = sum((data[k][i] - means[i]) * (data[k][j] - means[j])
+                                 for k in range(n)) / (n - 1)
+
+                # Normalize the covariance by the standard deviations
+                correlation = covariance / (std_devs[i] * std_devs[j])
+                correlation_row.append(correlation)
+            correlation_matrix.append(correlation_row)
+
+        return Matrix(correlation_matrix)

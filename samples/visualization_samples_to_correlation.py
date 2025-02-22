@@ -1,5 +1,6 @@
 from matrixlib.core import Matrix
 from matrixlib.visualization import Visualize
+from matrixlib.operations import Operation
 
 # Sample data
 data = [
@@ -12,13 +13,12 @@ data = [
 # Create a Matrix instance
 matrix = Matrix(data)
 
-# Compute the correlation matrix
-correlation_matrix = matrix.correlation()
 
+correlation_matrix = Operation.correlation(matrix)
 # Print the correlation matrix
 print("Correlation Matrix:")
 print(correlation_matrix)
 
 # Visualizing the correlation matrix
 visualizer = Visualize()
-visualizer.to_heatmap(correlation_matrix)
+visualizer.to_correlation_network(correlation_matrix)

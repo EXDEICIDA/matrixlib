@@ -4,14 +4,13 @@ from matrixlib.norms import Norm
 # Create your measurement matrices
 measurements1 = Matrix([
     [25, 60],  # 25°C, 60% humidity
-    [24, 65]   # 24°C, 65% humidity
+    [24, 65]  # 24°C, 65% humidity
 ])
 
 measurements2 = Matrix([
     [26, 58],
     [25, 63]
 ])
-
 
 # Calculate Frobenius norm (overall magnitude of measurements)
 frob1 = Norm.frobenius(measurements1)

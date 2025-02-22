@@ -154,3 +154,34 @@ class Norm:
             return Norm.induced_norm(matrix, p) * Norm.induced_norm(inv_matrix, p)
         except ValueError:
             return float('inf')
+
+    @staticmethod
+    def schatten_norm(matrix: Matrix, p: Union[int, float] = 2) -> float:
+        """
+        Compute the Schatten p-norm (p-norm of singular values).
+        For p=1 this is the nuclear norm
+        For p=2 this is the Frobenius norm
+        For p=inf this is the spectral norm
+        """
+        if p < 1:
+            raise ValueError("p must be greater than or equal to 1")
+
+        singular_values = Norm._get_singular_values(matrix)
+        return sum(sv ** (p / 2) for sv in singular_values) ** (1 / p)
+
+    @staticmethod
+    def relative_norm(matrix1: Matrix, matrix2: Matrix, norm_type: str = 'frobenius') -> float:
+        """
+        Compute the relative norm between two matrices: ||A-B|| / ||B||
+        """
+        if matrix1.data[0].shape != matrix2.data[0].shape:
+            raise ValueError("Matrices must have the same dimensions")
+
+        diff_matrix = Matrix([[a - b for a, b in zip(row1, row2)]
+                              for row1, row2 in zip(matrix1.data, matrix2.data)])
+
+        norm_method = getattr(Norm, norm_type.lower(), None)
+        if norm_method is None:
+            raise ValueError(f"Unsupported norm type: {norm_type}")
+
+        return norm_method(diff_matrix) / norm_method(matrix2)

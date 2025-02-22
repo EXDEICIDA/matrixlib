@@ -17,5 +17,3 @@ Visualize.to_heatmap(
     ylabel="Time Period",
     figsize=(10, 6)
 )
-
-
