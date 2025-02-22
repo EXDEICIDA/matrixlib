@@ -215,5 +215,3 @@ class Operation:
         for _ in range(n - 1):
             result = Operation.multiply(result, matrix)
         return result
-
-
