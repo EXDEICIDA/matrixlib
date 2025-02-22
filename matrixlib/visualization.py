@@ -406,9 +406,8 @@ class Visualize:
         fig.update_layout(
             title=title,
             font_size=10,
-            width=figsize[0] * 100,  # Convert inches to pixels
+            width=figsize[0] * 100,
             height=figsize[1] * 100
         )
 
-        # Show the plot
         fig.show()
