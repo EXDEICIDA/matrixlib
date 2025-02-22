@@ -1,290 +1,193 @@
-# Matrix Library Documentation
+```markdown
+# matrixlib Documentation
 
-A powerful Python library for matrix operations and analysis, supporting N-dimensional matrices with various mathematical operations and property checks.
+## Introduction
+**matrixlib** is a comprehensive Python library for advanced matrix operations, linear algebra computations, and data visualization. Designed for both educational and practical use, it provides recursive implementations for N-dimensional matrices and emphasizes clarity, extensibility, and numerical stability. Key features include:
 
-## Table of Contents
-1. [Matrix Class](#matrix-class)
-2. [Matrix Operations](#matrix-operations)
-3. [Matrix Properties](#matrix-properties)
-4. [Examples](#examples)
+- Matrix operations (addition, multiplication, determinants, inverses)
+- Matrix factorizations (LU, SVD, QR, Jordan)
+- Norm and distance metric computations
+- Matrix property validation (symmetric, orthogonal, triangular)
+- Visualization tools (heatmaps, 3D plots, networks)
 
-## Matrix Class
+---
 
-The `Matrix` class provides the foundation for creating and manipulating matrices of any dimension.
+## Core Classes
 
-### Constructor
+### 1. `Matrix` Class (Base Class)
+*Handles matrix creation, storage, and basic manipulations.*  
+*(Assumed to be implemented but not documented in provided files.)*
 
-```python
-Matrix(data: List)
+---
+
+### 2. `Operation` Class  
+#### Overview  
+Provides fundamental and advanced matrix operations.  
+
+#### Basic Operations  
+| Method | Description | Mathematical Expression |  
+|--------|-------------|-------------------------|  
+| `add(a, b)` | Element-wise addition | \( C = A + B \) |  
+| `subtract(a, b)` | Element-wise subtraction | \( C = A - B \) |  
+| `multiply(a, b)` | Matrix multiplication | \( C = A \times B \) |  
+| `transpose(a)` | Transpose matrix | \( C = A^T \) |  
+
+#### Advanced Operations  
+| Method | Description | Formula |  
+|--------|-------------|---------|  
+| `determinant(matrix)` | Recursive Laplace expansion | \( |A| = \sum_{j} (-1)^{i+j} a_{ij} M_{ij} \) |  
+| `inverse(matrix)` | Adjugate method | \( A^{-1} = \frac{1}{|A|} \text{adj}(A) \) |  
+| `trace(matrix)` | Sum of diagonal elements | \( \text{tr}(A) = \sum_{i} a_{ii} \) |  
+
+#### Example:  
+```python  
+A = Matrix([[1, 2], [3, 4]])  
+B = Operation.inverse(A)  # Inverse of A  
 ```
 
-Creates a new Matrix instance from a nested list structure.
+---
 
-**Parameters:**
-- `data`: A nested list representing the matrix data. Can be N-dimensional.
+### 3. `Norm` Class  
+#### Overview  
+Computes matrix norms and related metrics.  
 
-**Raises:**
-- `ValueError`: If matrix data is empty or has inconsistent dimensions
-- `TypeError`: If input data is not a list
+#### Key Methods  
+| Method | Description | Formula |  
+|--------|-------------|---------|  
+| `frobenius(matrix)` | Frobenius norm | \( ||A||_F = \sqrt{\sum_{i,j} a_{ij}^2} \) |  
+| `spectral_norm(matrix)` | Largest singular value | \( ||A||_2 = \sqrt{\lambda_{\text{max}}(A^T A)} \) |  
+| `nuclear_norm(matrix)` | Sum of singular values | \( ||A||_* = \sum_i \sigma_i \) |  
 
-### Methods
-
-#### `_get_shape(data)`
-Returns the dimensions of the matrix as a tuple.
-
-```python
-@staticmethod
-def _get_shape(data)
+#### Example:  
+```python  
+matrix = Matrix([[1, 2], [3, 4]])  
+frob = Norm.frobenius(matrix)  # ≈ 5.477  
 ```
 
-**Returns:**
-- Tuple representing matrix dimensions (e.g., (3,3) for 3x3 matrix)
+---
 
-#### `is_square_matrix()`
-Checks if the matrix is square (equal number of rows and columns).
+### 4. `MatrixProperties` Class  
+#### Overview  
+Validates matrix types and properties.  
 
-```python
-def is_square_matrix() -> bool
+#### Key Checks  
+| Method | Matrix Type | Example |  
+|--------|-------------|---------|  
+| `is_upper_triangular()` | Upper triangular | All elements below diagonal are zero |  
+| `is_orthogonal()` | Orthogonal | \( Q^T = Q^{-1} \) |  
+| `is_symmetric()` | Symmetric | \( A = A^T \) |  
+
+#### Example:  
+```python  
+sym_matrix = Matrix([[1, 2], [2, 3]])  
+print(MatrixProperties(sym_matrix).is_symmetric())  # True  
 ```
 
-**Returns:**
-- `True` if matrix is square, `False` otherwise
+---
 
-## Matrix Operations
+### 5. `Factorization` Class  
+#### Overview  
+Implements matrix decomposition techniques.  
 
-The `Operation` class provides static methods for common matrix operations.
+#### Methods  
+| Method | Description | Formula |  
+|--------|-------------|---------|  
+| `lu_decomposition(matrix)` | LU decomposition | \( A = LU \) |  
+| `svd(matrix)` | Singular Value Decomposition | \( A = U S V^T \) |  
+| `qr_decomposition(matrix)` | QR factorization | \( A = QR \) |  
 
-### Addition
-
-```python
-@staticmethod
-def add(a: Matrix, b: Matrix) -> Matrix
+#### Example:  
+```python  
+A = Matrix([[4, 3], [6, 3]])  
+L, U = Factorization.lu_decomposition(A)  
 ```
 
-Performs element-wise addition of two matrices.
+---
 
-**Parameters:**
-- `a`: First matrix
-- `b`: Second matrix
+### 6. `Distance` Class  
+#### Overview  
+Computes distance metrics between matrices.  
 
-**Returns:**
-- New Matrix with element-wise sum
+#### Metrics  
+| Method | Description | Formula |  
+|--------|-------------|---------|  
+| `euclidean(a, b)` | Euclidean distance | \( \sqrt{\sum (a_{ij} - b_{ij})^2} \) |  
+| `cosine(a, b)` | Cosine similarity | \( 1 - \frac{\sum a_{ij}b_{ij}}{||A||_F ||B||_F} \) |  
 
-**Raises:**
-- `ValueError`: If matrices have different shapes
-
-### Subtraction
-
-```python
-@staticmethod
-def subtract(a: Matrix, b: Matrix) -> Matrix
+#### Example:  
+```python  
+dist = Distance().calculate(A, B, metric="euclidean")  
 ```
 
-Performs element-wise subtraction of two matrices.
+---
 
-**Parameters:**
-- `a`: First matrix
-- `b`: Second matrix
+### 7. `Visualize` Class  
+#### Overview  
+Creates visual representations of matrices.  
 
-**Returns:**
-- New Matrix with element-wise difference
+#### Methods  
+| Method | Visualization Type |  
+|--------|--------------------|  
+| `to_heatmap()` | Color-coded heatmap |  
+| `to_graph()` | Network graph |  
+| `to_surface3d()` | 3D surface plot |  
 
-**Raises:**
-- `ValueError`: If matrices have different shapes
-
-### Multiplication
-
-```python
-@staticmethod
-def multiply(a: Matrix, b: Matrix) -> Matrix
+#### Example:  
+```python  
+Visualize.to_heatmap(Matrix([[1, 2], [3, 4]]), title="Sample Heatmap")  
 ```
 
-Performs matrix multiplication.
+---
 
-**Parameters:**
-- `a`: First matrix
-- `b`: Second matrix
+## Advanced Topics
 
-**Returns:**
-- New Matrix with multiplication result
+### Performance Considerations  
+| Operation | Time Complexity |  
+|-----------|-----------------|  
+| Matrix Multiplication | \( O(n^3) \) |  
+| LU Decomposition | \( O(n^3) \) |  
+| Spectral Norm | \( O(kn^2) \) (iterative) |  
 
-**Raises:**
-- `ValueError`: If inner dimensions don't match
+### Error Handling  
+- **Dimension Mismatch**: Raised for incompatible matrix shapes.  
+- **Singular Matrix**: Raised during inversion if determinant is zero.  
 
-### Scalar Multiplication
+### Best Practices  
+1. Validate inputs using `validate_dimensions()`.  
+2. Use tolerance checks for floating-point comparisons.  
+3. Precompute expensive operations (e.g., determinants).  
 
-```python
-@staticmethod
-def scalar_multiply(matrix: Matrix, scalar: float) -> Matrix
+---
+
+## Comprehensive Example  
+```python  
+# Create matrices  
+A = Matrix([[1, 2], [3, 4]])  
+B = Matrix([[5, 6], [7, 8]])  
+
+# Perform operations  
+C = Operation.add(A, B)  
+D = Factorization.lu_decomposition(C)  
+Norm.spectral_norm(D[0])  
+
+# Visualize  
+Visualize.to_heatmap(C)  
 ```
 
-Multiplies every element in the matrix by a scalar value.
+---
 
-**Parameters:**
-- `matrix`: Input matrix
-- `scalar`: Number to multiply by
+## References  
+1. Golub & Van Loan, *Matrix Computations*  
+2. Horn & Johnson, *Matrix Analysis*  
+3. Strang, *Introduction to Linear Algebra*  
 
-**Returns:**
-- New Matrix with scaled values
+## Appendix  
+### Dependencies  
+- `numpy`, `matplotlib`, `networkx`, `plotly`  
 
-### Transpose
+### Contributing Guidelines  
+- Follow existing method patterns.  
+- Include input validation and error handling.  
+``` 
 
-```python
-@staticmethod
-def transpose(a: Matrix) -> Matrix
-```
-
-Transposes the matrix (converts rows to columns and vice versa).
-
-**Parameters:**
-- `a`: Input matrix
-
-**Returns:**
-- New Matrix with transposed elements
-
-### Determinant
-
-```python
-@staticmethod
-def determinant(matrix: Matrix) -> float
-```
-
-Calculates the determinant of a square matrix.
-
-**Parameters:**
-- `matrix`: Square matrix
-
-**Returns:**
-- Determinant value
-
-**Raises:**
-- `ValueError`: If matrix is not square
-
-### Adjugate
-
-```python
-@staticmethod
-def adjugate(matrix: Matrix) -> Matrix
-```
-
-Calculates the adjugate (transpose of cofactor matrix).
-
-**Parameters:**
-- `matrix`: Square matrix
-
-**Returns:**
-- Adjugate matrix
-
-### Inverse
-
-```python
-@staticmethod
-def inverse(matrix: Matrix) -> Matrix
-```
-
-Calculates the inverse of a matrix.
-
-**Parameters:**
-- `matrix`: Square matrix
-
-**Returns:**
-- Inverse matrix
-
-**Raises:**
-- `ValueError`: If matrix is singular or not square
-
-## Matrix Properties
-
-The `MatrixProperties` class provides methods to check various matrix properties.
-
-### Constructor
-
-```python
-MatrixProperties(matrix: Union[Matrix, List])
-```
-
-**Parameters:**
-- `matrix`: Matrix object or nested list
-
-### Property Methods
-
-#### Triangular Matrices
-
-```python
-def is_upper_triangular() -> bool
-def is_lower_triangular() -> bool
-```
-
-Check if matrix is upper or lower triangular.
-
-#### Hessenberg Matrices
-
-```python
-def is_upper_hessenberg() -> bool
-def is_lower_hessenberg() -> bool
-```
-
-Check if matrix is upper or lower Hessenberg form.
-
-#### Orthogonal Matrix
-
-```python
-def is_orthogonal() -> bool
-```
-
-Check if matrix is orthogonal (A^T × A = I).
-
-#### Hollow Matrix
-
-```python
-def is_hollow() -> bool
-```
-
-Check if matrix is hollow (zero diagonal elements).
-
-## Examples
-
-### Creating a Matrix
-
-```python
-# Create a 2x2 matrix
-matrix = Matrix([
-    [1, 2],
-    [3, 4]
-])
-
-# Create a 3x3 matrix
-matrix_3x3 = Matrix([
-    [1, 2, 3],
-    [4, 5, 6],
-    [7, 8, 9]
-])
-```
-
-### Basic Operations
-
-```python
-# Addition
-result = Operation.add(matrix_a, matrix_b)
-
-# Multiplication
-product = Operation.multiply(matrix_a, matrix_b)
-
-# Transpose
-transposed = Operation.transpose(matrix)
-
-# Determinant
-det = Operation.determinant(matrix)
-```
-
-### Checking Properties
-
-```python
-props = MatrixProperties(matrix)
-
-# Check if matrix is upper triangular
-is_upper = props.is_upper_triangular()
-
-# Check if matrix is orthogonal
-is_orthogonal = props.is_orthogonal()
-```
+This documentation consolidates all provided class files into a structured, unified format while preserving mathematical rigor and practical examples.
