@@ -1,4 +1,3 @@
-Here's an extended and improved version of the documentation for your `Visualize` class. I've added more details and explanations for each section and method, and refined the formatting for clarity.
 
 ---
 
@@ -311,4 +310,4 @@ def analyze_matrix(matrix: Matrix):
 
 ---
 
-This documentation should provide a clear understanding of the `Visualize` class and its functionalities, along with examples and best practices for its use. Let me know if you need further adjustments or additional sections!
+
