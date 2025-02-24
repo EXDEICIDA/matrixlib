@@ -285,8 +285,6 @@ else:
 3. Utilize parallel processing for large computations
 4. Cache frequently used results
 
-## Contri
-
 ### Style Guide
 - Follow PEP 8
 - Use type hints
