@@ -162,7 +162,7 @@ Visualization.to_graph(adjacency_matrix,
                       layout='spring')
 ```
 
-<img src="/api/placeholder/600/400" alt="Network Graph Example"/>
+![Network Graph](matrix-assets/to-graph-test.png)
 
 #### 3D Surface Plot
 ```python
@@ -170,7 +170,7 @@ Visualization.to_surface3d(height_matrix,
                           cmap='viridis')
 ```
 
-<img src="/api/placeholder/600/400" alt="3D Surface Plot Example"/>
+![3D Surface](matrix-assets/to_3d_test.png)
 
 #### Correlation Network
 ```python
@@ -178,7 +178,7 @@ Visualization.to_correlation_network(correlation_matrix,
                                    threshold=0.5)
 ```
 
-<img src="/api/placeholder/600/400" alt="Correlation Network Example"/>
+![Correlation Network](matrix-assets/CorrelationNetwork.png)
 
 ### Matrix Properties
 
