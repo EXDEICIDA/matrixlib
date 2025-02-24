@@ -118,14 +118,10 @@ Provides various matrix decomposition methods.
 L, U = Factorization.lu_decomposition(matrix)
 ```
 
-<img src="/api/placeholder/600/400" alt="LU Decomposition Visualization"/>
-
 #### SVD
 ```python
 U, S, V = Factorization.svd(matrix)
 ```
-
-<img src="/api/placeholder/600/400" alt="SVD Visualization"/>
 
 ### Norm Class
 
@@ -289,19 +285,7 @@ else:
 3. Utilize parallel processing for large computations
 4. Cache frequently used results
 
-## Contributing
-
-### Development Setup
-```bash
-git clone https://github.com/yourusername/matrixlib
-cd matrixlib
-pip install -e ".[dev]"
-```
-
-### Running Tests
-```bash
-pytest tests/
-```
+## Contri
 
 ### Style Guide
 - Follow PEP 8
