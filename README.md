@@ -153,7 +153,7 @@ Visualization.to_heatmap(matrix,
                         cmap="coolwarm")
 ```
 
-![Heatmap](matrix-assets/your-image-file.png)
+![Heatmap](matrix-assets/to_heatmap-test.pn)
 
 #### Network Graph
 ```python
